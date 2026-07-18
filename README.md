@@ -145,6 +145,8 @@ Instead of simply labeling something as "Safe" or "Dangerous", the platform also
 ```text
 SINGHAM/
 ├── backend/                        # Flask backend application
+│   ├── .env                        # Local environment variables (API keys)
+│   ├── .env.example                # Example environment variables template
 │   ├── ML_model/                   # Machine Learning model binaries
 │   │   └── malwareclassifier-V2.pkl # Pre-trained malware classifier model
 │   ├── app.py                      # Main Flask application and API route controllers
@@ -153,14 +155,16 @@ SINGHAM/
 │   ├── featureextraction.py        # URL security feature extraction logic
 │   ├── knowledge_base.txt          # Reference text/document database for RAG phishing detector
 │   ├── phishing_model.pkl          # Pre-trained XGBoost/Random Forest URL scanner model
-│   ├── stats.db                    # SQLite database to track system scan metrics
-│   └── uploads/                    # Temporary storage directory for uploaded files during scans
+│   └── stats.db                    # SQLite database to track system scan metrics
 ├── frontend/                       # User Interface resources
 │   ├── static/                     # Static CSS styling & JavaScript logic files
 │   │   ├── email/                  # Static assets for the Email Phishing detector
 │   │   │   ├── script.js
 │   │   │   └── style.css
 │   │   ├── fake_qr/                # Static assets for the Fake QR Code scanner
+│   │   │   ├── app.js
+│   │   │   └── style.css
+│   │   ├── malware/                # Static assets for the Malware scanner
 │   │   │   ├── app.js
 │   │   │   └── style.css
 │   │   └── url_scam/               # Static assets for the Scam URL scanner

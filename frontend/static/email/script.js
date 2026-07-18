@@ -24,7 +24,7 @@ document.addEventListener('DOMContentLoaded', () => {
         formData.append('file', file);
 
         try {
-            const response = await fetch('/analyze', {
+            const response = await fetch('/analyze_email', {
                 method: 'POST',
                 body: formData
             });
