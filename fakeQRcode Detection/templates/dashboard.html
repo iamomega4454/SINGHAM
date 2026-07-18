@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Phishing Threat Detector - Dashboard</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <div class="page-shell">
+    
+    <main class="dashboard-grid">
+      <section class="panel input-panel">
+        <div class="panel-heading">
+          <h2>Analyze URL</h2>
+          <p>Paste any website address and run a phishing check.</p>
+        </div>
+
+        <form id="scan-form" class="scan-form">
+          <label for="url-input" class="input-label">Website URL</label>
+          <div class="input-row">
+            <input
+              id="url-input"
+              name="url"
+              type="url"
+              placeholder="https://example.com"
+              autocomplete="off"
+              required
+            >
+            <button type="submit" id="scan-button">Scan Now</button>
+            <input type="file" id="qr-upload" accept="image/*" style="display: none;">
+            <button type="button" id="qr-upload-button" style="background: #2d3748; color: white; padding: 0.75rem 1rem; border-radius: 8px; font-weight: 600; cursor: pointer; border: none;">Upload QR</button>
+          </div>
+          <div id="qr-reader" style="display: none;"></div>
+        </form>
+
+        <div class="status-row">
+          <span id="status-pill" class="status-pill idle">Waiting for input</span>
+          <p id="request-message" class="request-message">
+            The backend response will appear below after analysis completes.
+          </p>
+        </div>
+
+        <div class="summary-grid">
+          <article class="summary-card card-url">
+            <span class="summary-label">Scanned URL</span>
+            <strong id="url-value" style="word-break: break-all;">No URL yet</strong>
+          </article>
+          
+          <article class="summary-card card-confidence">
+            <span class="summary-label">Threat Level</span>
+            <div class="circular-progress" id="threat-circle">
+              <span class="progress-value" id="threat-value">0%</span>
+            </div>
+          </article>
+
+          <article class="summary-card card-prediction">
+            <span class="summary-label">Prediction</span>
+            <strong id="prediction-value" style="font-size: 1.4rem; margin-top: 15px; display: inline-block;">Not analyzed</strong>
+          </article>
+        </div>
+      </section>
+
+      <section class="panel chart-panel">
+        <div class="panel-heading">
+          <h2>Main Threat Signals</h2>
+          <p>Pie graph of the top explainability impacts returned by the backend.</p>
+        </div>
+
+        <div class="chart-wrap">
+          <canvas id="feature-chart" aria-label="Threat feature pie chart"></canvas>
+        </div>
+
+        <div id="chart-legend" class="chart-legend">
+          <p class="empty-state">Run a scan to populate the main feature breakdown.</p>
+        </div>
+      </section>
+
+      <section class="panel explanation-panel">
+        <div class="panel-heading">
+          <h2>Explainability Output</h2>
+          <p>
+            This section displays the human-readable reasoning based on the logic exposed
+            by the backend explainability layer.
+          </p>
+        </div>
+
+        <div id="explanation-list" class="explanation-list">
+          <article class="empty-card">
+            <h3>No explanation yet</h3>
+            <p>The explanation entries from the backend will be rendered here.</p>
+          </article>
+        </div>
+      </section>
+
+      <section class="panel feature-panel">
+        <div class="panel-heading">
+          <h2>Extracted Feature Snapshot</h2>
+          <p>Quick view of the strongest extracted indicators used for the decision.</p>
+        </div>
+
+        <div id="feature-list" class="feature-list">
+          <p class="empty-state">No extracted features to display yet.</p>
+        </div>
+      </section>
+    </main>
+
+
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
+  <script src="{{ url_for('static', filename='app.js') }}"></script>
+</body>
+</html>

@@ -1,0 +1,14 @@
+Flask
+Flask-CORS
+Numpy
+Pandas
+scikit-learn
+xgboost
+shap
+joblib
+requests
+beautifulsoup4
+python-whois
+gunicorn
+
+

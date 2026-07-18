@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PhishGuard AI | Phishing Detector</title>
+    <!-- Modern Google Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="glass-container">
+        <header>
+            <div class="logo">
+                <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="url(#grad1)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <defs>
+                        <linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" style="stop-color:#38bdf8;stop-opacity:1" />
+                            <stop offset="100%" style="stop-color:#818cf8;stop-opacity:1" />
+                        </linearGradient>
+                    </defs>
+                    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+                </svg>
+                <h1>PhishGuard AI</h1>
+            </div>
+            <p>Advanced Phishing Detection via Gemini & RAG</p>
+        </header>
+        
+        <main>
+            <div class="input-section">
+                <label for="email-file">Upload Email PDF</label>
+                <div class="file-upload-container" style="margin-bottom: 20px; border: 2px dashed #818cf8; border-radius: 10px; padding: 20px; text-align: center; cursor: pointer; transition: background-color 0.3s;" onclick="document.getElementById('email-file').click();">
+                    <p style="margin: 0; color: #a5b4fc; font-weight: 500;">Click to select a PDF or drag and drop</p>
+                    <input type="file" id="email-file" accept=".pdf" style="display: none;" onchange="document.getElementById('file-name-display').textContent = this.files[0] ? this.files[0].name : 'No file chosen';" />
+                    <p id="file-name-display" style="margin-top: 10px; font-size: 0.9em; color: #fff;"></p>
+                </div>
+                <button id="analyze-btn">
+                    <span class="btn-text">Scan for Phishing</span>
+                    <span class="loader hidden"></span>
+                </button>
+            </div>
+            
+            <div class="result-section hidden" id="result-section">
+                <h2>Analysis Result</h2>
+                <div id="result-content" class="result-content"></div>
+            </div>
+        </main>
+    </div>
+    
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>

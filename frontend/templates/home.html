@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SINGHAM - Threat Detection Dashboard</title>
+    <style>
+        :root {
+            --bg-color: #0f172a;
+            --text-color: #f8fafc;
+            --card-bg: #1e293b;
+            --primary-accent: #3b82f6;
+            --hover-accent: #60a5fa;
+            --shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.5), 0 4px 6px -2px rgba(0, 0, 0, 0.25);
+            --transition: all 0.3s ease;
+        }
+
+        body {
+            margin: 0;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        header {
+            width: 100%;
+            padding: 2rem 0;
+            text-align: center;
+            background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
+            margin-bottom: 3rem;
+        }
+
+        h1 {
+            margin: 0;
+            font-size: 3rem;
+            background: -webkit-linear-gradient(#60a5fa, #3b82f6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: 2px;
+        }
+
+        p.subtitle {
+            margin-top: 0.5rem;
+            color: #94a3b8;
+            font-size: 1.2rem;
+        }
+
+        .container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            width: 90%;
+            max-width: 1200px;
+            padding-bottom: 3rem;
+        }
+
+        .flash-card {
+            background-color: var(--card-bg);
+            border-radius: 16px;
+            padding: 2rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+            border: 1px solid #334155;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .flash-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 4px;
+            background: var(--primary-accent);
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: transform 0.4s ease;
+        }
+
+        .flash-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5), 0 10px 10px -5px rgba(0, 0, 0, 0.25);
+            border-color: var(--primary-accent);
+        }
+
+        .flash-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .card-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .card-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin: 0 0 1rem 0;
+            color: #e2e8f0;
+        }
+
+        .card-description {
+            color: #94a3b8;
+            line-height: 1.6;
+            margin-bottom: 2rem;
+            flex-grow: 1;
+        }
+
+        .scan-btn {
+            background-color: var(--primary-accent);
+            color: white;
+            border: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            text-decoration: none;
+            text-align: center;
+            transition: var(--transition);
+            display: inline-block;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        .scan-btn:hover {
+            background-color: var(--hover-accent);
+            box-shadow: 0 0 15px rgba(59, 130, 246, 0.5);
+        }
+
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>SINGHAM</h1>
+        <p class="subtitle">Unified Threat Detection Engine</p>
+    </header>
+
+    <div class="container">
+        <!-- URL Scam Detection -->
+        <div class="flash-card">
+            <div class="card-icon">🌐</div>
+            <h2 class="card-title">URL Scam Detection</h2>
+            <p class="card-description">Analyze URLs to detect phishing attempts, malicious redirects, and fraudulent websites using AI and advanced feature extraction.</p>
+            <a href="/url_scam" class="scan-btn">Scan URL</a>
+        </div>
+
+        <!-- Fake QR Code Detection -->
+        <div class="flash-card">
+            <div class="card-icon">📱</div>
+            <h2 class="card-title">Fake QR Code Detection</h2>
+            <p class="card-description">Scan QR codes safely. We extract and analyze the underlying destination to ensure it doesn't lead to malicious content or scams.</p>
+            <a href="/qr_scan" class="scan-btn">Scan QR Code</a>
+        </div>
+
+        <!-- Malware Detection -->
+        <div class="flash-card">
+            <div class="card-icon">🦠</div>
+            <h2 class="card-title">Malware Detection</h2>
+            <p class="card-description">Upload executable files (.exe, .dll) for deep analysis. Our ML classifier detects embedded malware and prevents system infection.</p>
+            <a href="/malware" class="scan-btn">Scan File</a>
+        </div>
+
+        <!-- Email Phishing Detection -->
+        <div class="flash-card">
+            <div class="card-icon">📧</div>
+            <h2 class="card-title">Email Phishing Detection</h2>
+            <p class="card-description">Upload email documents (PDFs) to identify phishing tactics, urgent language, and suspicious sender information using advanced RAG.</p>
+            <a href="/email_phishing" class="scan-btn">Scan Email</a>
+        </div>
+    </div>
+
+</body>
+</html>
