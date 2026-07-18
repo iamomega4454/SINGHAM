@@ -1,5 +1,5 @@
 <p align="center">
-<script> drawMatrix(); </script>
+<script src="appreadme.js"></script>
 </p>
 
 <h1 align="center">
