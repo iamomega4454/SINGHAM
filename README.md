@@ -2,7 +2,7 @@
   <img src="matrix.svg" alt="SINGHAM Matrix Rain" width="100%" />
 </p>
 
-<h1 align="center">
+<h1 align="center" width="100%">
 🛡️ SINGHAM
 </h1>
 
