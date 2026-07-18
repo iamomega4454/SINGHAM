@@ -1,5 +1,5 @@
 <p align="center">
-<script src="app.js"></script>
+<script src="appreadme.js"></script>
 </p>
 
 <h1 align="center">
