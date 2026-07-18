@@ -1,5 +1,5 @@
 <p align="center">
-<script src="appreadme.js"></script>
+  <img src="matrix.svg" alt="SINGHAM Matrix Rain" width="100%" />
 </p>
 
 <h1 align="center">

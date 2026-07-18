@@ -1,0 +1,88 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 300" width="100%" height="300" style="background:#0f172a; border-radius: 12px; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.5);">
+  <defs>
+    <linearGradient id="fade" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#00E6A8" stop-opacity="0" />
+      <stop offset="25%" stop-color="#00E6A8" stop-opacity="0.1" />
+      <stop offset="85%" stop-color="#00E6A8" stop-opacity="0.85" />
+      <stop offset="100%" stop-color="#ffffff" stop-opacity="1" />
+    </linearGradient>
+  </defs>
+  
+  <style>
+    @keyframes fall-front {
+      0% { transform: translateY(-350px); }
+      100% { transform: translateY(450px); }
+    }
+    @keyframes fall-mid {
+      0% { transform: translateY(-280px); }
+      100% { transform: translateY(380px); }
+    }
+    @keyframes fall-back {
+      0% { transform: translateY(-220px); }
+      100% { transform: translateY(320px); }
+    }
+    
+    .matrix-col {
+      font-family: 'Consolas', 'Courier New', monospace;
+      font-weight: 700;
+      fill: url(#fade);
+      writing-mode: vertical-rl;
+      text-orientation: upright;
+      animation-iteration-count: infinite;
+      animation-timing-function: linear;
+    }
+    
+    .col-front { animation-name: fall-front; }
+    .col-mid { animation-name: fall-mid; }
+    .col-back { animation-name: fall-back; }
+  </style>
+
+  <!-- Front Layer (Fast, Large, Bright) -->
+  <text x="15" y="0" class="matrix-col col-front" style="font-size: 15px; opacity: 1.0; animation-duration: 2.1s; animation-delay: -0.4s;">SINGHAM_SECURE_9F</text>
+  <text x="70" y="0" class="matrix-col col-front" style="font-size: 14px; opacity: 1.0; animation-duration: 1.9s; animation-delay: -1.5s;">THREAT_DETECTED_01</text>
+  <text x="120" y="0" class="matrix-col col-front" style="font-size: 16px; opacity: 1.0; animation-duration: 2.4s; animation-delay: -0.8s;">MALWARE_SCAN_4B</text>
+  <text x="180" y="0" class="matrix-col col-front" style="font-size: 15px; opacity: 1.0; animation-duration: 2.0s; animation-delay: -2.2s;">PHISHING_SHIELD_77</text>
+  <text x="230" y="0" class="matrix-col col-front" style="font-size: 14px; opacity: 1.0; animation-duration: 2.3s; animation-delay: -1.1s;">GUARD_ACTIVE_99</text>
+  <text x="300" y="0" class="matrix-col col-front" style="font-size: 16px; opacity: 1.0; animation-duration: 1.8s; animation-delay: -0.2s;">SYSTEM_SAFE_3A</text>
+  <text x="360" y="0" class="matrix-col col-front" style="font-size: 15px; opacity: 1.0; animation-duration: 2.5s; animation-delay: -1.7s;">CYBER_NET_SCAN_D4</text>
+  <text x="420" y="0" class="matrix-col col-front" style="font-size: 14px; opacity: 1.0; animation-duration: 2.1s; animation-delay: -0.9s;">KEY_LOCK_HASH_8C</text>
+  <text x="490" y="0" class="matrix-col col-front" style="font-size: 16px; opacity: 1.0; animation-duration: 2.2s; animation-delay: -2.7s;">SINGHAM_THREAT_5E</text>
+  <text x="550" y="0" class="matrix-col col-front" style="font-size: 15px; opacity: 1.0; animation-duration: 1.9s; animation-delay: -0.5s;">SECURITY_SHIELD</text>
+  <text x="610" y="0" class="matrix-col col-front" style="font-size: 14px; opacity: 1.0; animation-duration: 2.4s; animation-delay: -1.4s;">MALWARE_BLOCKED</text>
+  <text x="670" y="0" class="matrix-col col-front" style="font-size: 15px; opacity: 1.0; animation-duration: 2.0s; animation-delay: -2.9s;">PHISHING_ALERT_X0</text>
+  <text x="730" y="0" class="matrix-col col-front" style="font-size: 16px; opacity: 1.0; animation-duration: 2.3s; animation-delay: -0.6s;">QR_CODE_SAFE_A7</text>
+  <text x="800" y="0" class="matrix-col col-front" style="font-size: 14px; opacity: 1.0; animation-duration: 2.1s; animation-delay: -1.8s;">NETWORK_GUARD_3B</text>
+  <text x="860" y="0" class="matrix-col col-front" style="font-size: 15px; opacity: 1.0; animation-duration: 2.5s; animation-delay: -0.1s;">HASH_VERIFY_9D</text>
+  <text x="920" y="0" class="matrix-col col-front" style="font-size: 16px; opacity: 1.0; animation-duration: 1.8s; animation-delay: -2.3s;">SINGHAM_PORTAL</text>
+  <text x="975" y="0" class="matrix-col col-front" style="font-size: 14px; opacity: 1.0; animation-duration: 2.2s; animation-delay: -1.2s;">SCAN_COMPLETE</text>
+
+  <!-- Mid Layer (Medium, Semi-Transparent, Normal speed) -->
+  <text x="40" y="0" class="matrix-col col-mid" style="font-size: 12px; opacity: 0.65; animation-duration: 3.1s; animation-delay: -0.7s;">01010101010101</text>
+  <text x="95" y="0" class="matrix-col col-mid" style="font-size: 11px; opacity: 0.65; animation-duration: 2.8s; animation-delay: -2.5s;">ABCDEF0123456789</text>
+  <text x="150" y="0" class="matrix-col col-mid" style="font-size: 13px; opacity: 0.65; animation-duration: 3.5s; animation-delay: -1.2s;">!@#$%^*()_+=-</text>
+  <text x="205" y="0" class="matrix-col col-mid" style="font-size: 12px; opacity: 0.65; animation-duration: 2.9s; animation-delay: -3.1s;">SINGHAM_V2_PROT</text>
+  <text x="265" y="0" class="matrix-col col-mid" style="font-size: 11px; opacity: 0.65; animation-duration: 3.3s; animation-delay: -0.4s;">XGBOOST_MODEL_99</text>
+  <text x="330" y="0" class="matrix-col col-mid" style="font-size: 13px; opacity: 0.65; animation-duration: 2.7s; animation-delay: -1.9s;">RANDOM_FOREST_8C</text>
+  <text x="390" y="0" class="matrix-col col-mid" style="font-size: 12px; opacity: 0.65; animation-duration: 3.4s; animation-delay: -2.8s;">SHAP_EXPLAIN_XAI</text>
+  <text x="450" y="0" class="matrix-col col-mid" style="font-size: 11px; opacity: 0.65; animation-duration: 3.0s; animation-delay: -0.1s;">GEMINI_FLASH_35</text>
+  <text x="520" y="0" class="matrix-col col-mid" style="font-size: 13px; opacity: 0.65; animation-duration: 3.2s; animation-delay: -1.6s;">FAISS_VECTOR_DB</text>
+  <text x="580" y="0" class="matrix-col col-mid" style="font-size: 12px; opacity: 0.65; animation-duration: 2.9s; animation-delay: -3.4s;">PE_FILE_EXTRACT</text>
+  <text x="640" y="0" class="matrix-col col-mid" style="font-size: 11px; opacity: 0.65; animation-duration: 3.6s; animation-delay: -0.8s;">URL_FEATURE_SCAN</text>
+  <text x="700" y="0" class="matrix-col col-mid" style="font-size: 13px; opacity: 0.65; animation-duration: 2.8s; animation-delay: -2.1s;">FLASK_BACKEND_API</text>
+  <text x="765" y="0" class="matrix-col col-mid" style="font-size: 12px; opacity: 0.65; animation-duration: 3.3s; animation-delay: -1.3s;">VANILLA_JS_UI_88</text>
+  <text x="830" y="0" class="matrix-col col-mid" style="font-size: 11px; opacity: 0.65; animation-duration: 3.1s; animation-delay: -2.6s;">SQLITE_STATS_DB</text>
+  <text x="890" y="0" class="matrix-col col-mid" style="font-size: 13px; opacity: 0.65; animation-duration: 2.7s; animation-delay: -0.3s;">GITHUB_ACTIONS_CI</text>
+  <text x="950" y="0" class="matrix-col col-mid" style="font-size: 12px; opacity: 0.65; animation-duration: 3.5s; animation-delay: -1.9s;">DOCKER_CONTAINER</text>
+
+  <!-- Back Layer (Small, Very Faint, Slow) -->
+  <text x="30" y="0" class="matrix-col col-back" style="font-size: 9px; opacity: 0.35; animation-duration: 4.8s; animation-delay: -1.5s;">SINGHAM_DAEMON</text>
+  <text x="105" y="0" class="matrix-col col-back" style="font-size: 8px; opacity: 0.35; animation-duration: 4.2s; animation-delay: -3.8s;">SYSTEM_INIT_OK</text>
+  <text x="215" y="0" class="matrix-col col-back" style="font-size: 10px; opacity: 0.35; animation-duration: 5.2s; animation-delay: -0.5s;">PORT_5000_LISTEN</text>
+  <text x="280" y="0" class="matrix-col col-back" style="font-size: 9px; opacity: 0.35; animation-duration: 4.5s; animation-delay: -2.9s;">THREAD_POOL_START</text>
+  <text x="345" y="0" class="matrix-col col-back" style="font-size: 8px; opacity: 0.35; animation-duration: 5.5s; animation-delay: -1.1s;">MEM_ALLOC_SUCCESS</text>
+  <text x="475" y="0" class="matrix-col col-back" style="font-size: 10px; opacity: 0.35; animation-duration: 4.0s; animation-delay: -3.4s;">RAG_QUERY_INDEX</text>
+  <text x="595" y="0" class="matrix-col col-back" style="font-size: 9px; opacity: 0.35; animation-duration: 5.0s; animation-delay: -0.9s;">SHAP_VALUES_CALC</text>
+  <text x="715" y="0" class="matrix-col col-back" style="font-size: 8px; opacity: 0.35; animation-duration: 4.3s; animation-delay: -2.2s;">QR_DECODE_LIB_Z</text>
+  <text x="845" y="0" class="matrix-col col-back" style="font-size: 10px; opacity: 0.35; animation-duration: 5.1s; animation-delay: -4.1s;">PE_HEADER_MAGIC_MZ</text>
+  <text x="965" y="0" class="matrix-col col-back" style="font-size: 9px; opacity: 0.35; animation-duration: 4.6s; animation-delay: -1.7s;">LOG_RECORD_SAVED</text>
+</svg>
