@@ -1,4 +1,15 @@
 import os
+import warnings
+
+# Suppress deprecation and version/serialization mismatch warnings from third-party libraries
+warnings.filterwarnings("ignore", category=DeprecationWarning)
+warnings.filterwarnings("ignore", category=UserWarning)
+try:
+    from sklearn.exceptions import InconsistentVersionWarning
+    warnings.filterwarnings("ignore", category=InconsistentVersionWarning)
+except ImportError:
+    pass
+
 import sqlite3
 import joblib
 import numpy as np
