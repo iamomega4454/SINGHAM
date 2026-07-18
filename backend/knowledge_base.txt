@@ -1,0 +1,18 @@
+Phishing Detection Knowledge Base:
+
+Common Phishing Indicators:
+1. Urgent or Threatening Language: Phishing emails often create a sense of urgency or use threats, like account suspension, to prompt immediate action. Examples include "Immediate action required" or "Your account will be suspended".
+2. Suspicious Sender Address: The sender's email address might look similar to a legitimate one but contains subtle misspellings (e.g., paypa1.com instead of paypal.com) or uses a public domain (e.g., @gmail.com) instead of a corporate domain.
+3. Generic Greetings: Instead of using the recipient's name, phishing emails often use generic greetings like "Dear Customer" or "Dear Member."
+4. Unexpected Attachments: Phishing emails frequently include unexpected attachments, often disguised as invoices or receipts (e.g., .zip, .exe, .js files), which can contain malware.
+5. Suspicious Links: Links in phishing emails may lead to fraudulent websites designed to steal credentials. Hovering over a link (without clicking) can reveal the actual destination URL, which may differ from the displayed text.
+6. Requests for Personal Information: Legitimate organizations typically do not ask for sensitive information, such as passwords or Social Security numbers, via email.
+7. Poor Spelling and Grammar: Phishing emails often contain noticeable spelling and grammatical errors, which are less common in professional communications.
+8. Unfamiliar Sender: If an email comes from a sender you do not recognize or have not interacted with previously, it should be treated with caution.
+
+Examples of Phishing Tactics:
+- Spear Phishing: Targeted attacks aimed at specific individuals or organizations, often using personalized information to appear legitimate.
+- Whaling: A type of spear phishing that targets high-profile individuals, such as executives, to steal sensitive information or authorize fraudulent transactions.
+- Clone Phishing: Attackers create a nearly identical copy of a legitimate email, replacing links or attachments with malicious ones.
+- Vishing (Voice Phishing): Phishing attacks conducted over the phone, where the attacker impersonates a trusted entity to trick the victim into providing sensitive information.
+- Smishing (SMS Phishing): Phishing attacks conducted via text messages, often containing malicious links or requests for personal information.
