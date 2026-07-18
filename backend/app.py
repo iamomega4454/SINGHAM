@@ -21,7 +21,7 @@ from dotenv import load_dotenv
 # Feature extractions
 from featureextraction import extract_features as extract_features_url
 from feature_extraction_malware import extract_features as extract_features_malware
-from explainability import PhishingExplainer
+from explainability import PhishingExplainer, MalwareExplainer
 
 # Langchain / Gemini for Email Phishing
 from langchain_google_genai import ChatGoogleGenerativeAI, GoogleGenerativeAIEmbeddings
@@ -85,6 +85,7 @@ def increment_stat(column):
 # 2. Malware Detection Setup
 # -----------------------------
 malware_model = joblib.load('ML_model/malwareclassifier-V2.pkl')
+malware_explainer = MalwareExplainer(malware_model)
 UPLOAD_FOLDER = 'uploads'
 if not os.path.exists(UPLOAD_FOLDER):
     os.makedirs(UPLOAD_FOLDER)
@@ -239,16 +240,20 @@ def analyze_malware():
         features = extract_features_malware(file_path)
         if features is not None:
             prediction = malware_model.predict(features)
+            is_malware = prediction[0] == 1
+            explanation = malware_explainer.explain(features)
             result = {
                 "type": "file",
-                "prediction": "Malware" if prediction[0] == 1 else "Safe",
-                "file_name": file.filename
+                "prediction": "Malware" if is_malware else "Safe",
+                "file_name": file.filename,
+                "explanation": explanation
             }
         else:
             result = {
                 "type": "file",
                 "prediction": "Error: Invalid PE file format",
-                "file_name": file.filename
+                "file_name": file.filename,
+                "explanation": []
             }
         if os.path.exists(file_path):
             os.remove(file_path)
