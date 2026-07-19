@@ -66,6 +66,79 @@
         #result-content p {
             margin-bottom: 1rem;
         }
+
+        /* Missing Verdict & Circular Graph Styles for White Theme */
+        .verdict {
+            display: inline-block;
+            padding: 0.5rem 1.5rem;
+            font-size: 1.5rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            border-radius: 12px;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05);
+            border: 2px solid transparent;
+        }
+        .verdict-phishing {
+            background: rgba(239, 68, 68, 0.1);
+            color: #ef4444;
+            border-color: rgba(239, 68, 68, 0.4);
+        }
+        .verdict-safe {
+            background: rgba(16, 185, 129, 0.1);
+            color: #10b981;
+            border-color: rgba(16, 185, 129, 0.4);
+        }
+
+        .risk-graph-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-bottom: 2rem;
+            padding: 1.5rem;
+            background: rgba(0, 0, 0, 0.03);
+            border-radius: 16px;
+            border: 1px solid rgba(0, 0, 0, 0.05);
+        }
+        .circular-chart {
+            display: block;
+            margin: 10px auto;
+            max-width: 150px;
+            max-height: 150px;
+        }
+        .circle-bg {
+            fill: none;
+            stroke: rgba(0, 0, 0, 0.1);
+            stroke-width: 3.8;
+        }
+        .circle {
+            fill: none;
+            stroke-width: 3.8;
+            stroke-linecap: round;
+            animation: progress 1.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+        @keyframes progress { 0% { stroke-dasharray: 0 100; } }
+        .circular-chart.low-risk .circle { stroke: #10b981; }
+        .circular-chart.medium-risk .circle { stroke: #fbbf24; }
+        .circular-chart.high-risk .circle { stroke: #ef4444; }
+        .percentage {
+            fill: #0a2540;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.55em;
+            text-anchor: middle;
+            font-weight: 700;
+        }
+        .risk-label {
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-top: 10px;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+        }
+        .risk-label.low-risk { color: #10b981; }
+        .risk-label.medium-risk { color: #fbbf24; }
+        .risk-label.high-risk { color: #ef4444; }
     </style>
     <style>
         body { background: transparent !important; }
