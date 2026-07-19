@@ -37,11 +37,90 @@ load_dotenv()
 app = Flask(__name__, template_folder='../frontend/templates', static_folder='../frontend/static')
 CORS(app)
 
-# -----------------------------
-# 1. URL & QR Code Scam Detection Setup
-# -----------------------------
-phishing_model = joblib.load("phishing_model.pkl")
-feature_names = [
+# ─────────────────────────────────────────
+# Lazy model cache  (populated on first use)
+# ─────────────────────────────────────────
+import threading
+_models = {}
+_models_lock = threading.Lock()
+
+def get_phishing_model():
+    """Load URL/QR phishing model + explainer once, cache forever."""
+    if 'phishing' not in _models:
+        with _models_lock:
+            if 'phishing' not in _models:          # double-checked locking
+                model = joblib.load("phishing_model.pkl")
+                _models['phishing'] = {
+                    'model': model,
+                    'explainer': PhishingExplainer(model, FEATURE_NAMES)
+                }
+    return _models['phishing']
+
+def get_malware_model():
+    """Load malware classifier + SHAP explainer once, cache forever."""
+    if 'malware' not in _models:
+        with _models_lock:
+            if 'malware' not in _models:
+                model = joblib.load('ML_model/malwareclassifier-V2.pkl')
+                _models['malware'] = {
+                    'model': model,
+                    'explainer': MalwareExplainer(model)
+                }
+    return _models['malware']
+
+def get_rag_chain():
+    """Build the Gemini RAG chain once, cache forever. Returns (chain, error)."""
+    if 'rag' not in _models:
+        with _models_lock:
+            if 'rag' not in _models:
+                chain, err = None, None
+                api_key = os.getenv("GEMINI_API_KEY")
+                if not api_key:
+                    err = "GEMINI_API_KEY is not set."
+                else:
+                    try:
+                        llm = ChatGoogleGenerativeAI(
+                            model="gemini-3.5-flash",
+                            google_api_key=api_key,
+                            temperature=0.1
+                        )
+                        embeddings = GoogleGenerativeAIEmbeddings(
+                            model="models/gemini-embedding-2",
+                            google_api_key=api_key
+                        )
+                        loader = TextLoader("knowledge_base.txt")
+                        docs   = loader.load()
+                        splitter = RecursiveCharacterTextSplitter(chunk_size=500, chunk_overlap=100)
+                        splits   = splitter.split_documents(docs)
+                        vectorstore = FAISS.from_documents(documents=splits, embedding=embeddings)
+                        retriever   = vectorstore.as_retriever()
+
+                        system_prompt = (
+                            "You are an expert cybersecurity analyst specialized in detecting email phishing attempts. "
+                            "Use the following retrieved context to analyze the provided email content. "
+                            "Determine if the email is 'Phishing' or 'Safe'. Provide a detailed reasoning based on the context and indicators present. "
+                            "Point out specific red flags (if any) such as urgent language, suspicious links, or weird sender domains. "
+                            "Also, estimate the probability (0 to 100) that this email is phishing based on the severity of the indicators. "
+                            "Format your response in a clear and structured way using Markdown.\n\n"
+                            "IMPORTANT: You MUST start your response exactly with the following HTML block to highlight the final verdict and probability. "
+                            "Use <div class='verdict verdict-safe' data-probability='[PROBABILITY]'>SAFE</div> if safe, or <div class='verdict verdict-phishing' data-probability='[PROBABILITY]'>PHISHING</div> if it is phishing. Replace [PROBABILITY] with the integer percentage chance (e.g. 15 for 15%).\n\n"
+                            "{context}"
+                        )
+                        prompt = ChatPromptTemplate.from_messages([
+                            ("system", system_prompt),
+                            ("human", "{input}")
+                        ])
+                        question_answer_chain = create_stuff_documents_chain(llm, prompt)
+                        chain = create_retrieval_chain(retriever, question_answer_chain)
+                    except Exception as e:
+                        err = str(e)
+                _models['rag'] = {'chain': chain, 'error': err}
+    return _models['rag']['chain'], _models['rag']['error']
+
+# ─────────────────────────────────────────
+# Shared constants
+# ─────────────────────────────────────────
+FEATURE_NAMES = [
     'having_IP_Address', 'URL_Length', 'Shortining_Service', 'having_At_Symbol',
     'double_slash_redirecting', 'Prefix_Suffix', 'having_Sub_Domain', 'SSLfinal_State',
     'Domain_registeration_length', 'Favicon', 'port', 'HTTPS_token', 'Request_URL',
@@ -50,9 +129,12 @@ feature_names = [
     'DNSRecord', 'web_traffic', 'Page_Rank', 'Google_Index', 'Links_pointing_to_page',
     'Statistical_report'
 ]
-explainer = PhishingExplainer(phishing_model, feature_names)
 
+# ─────────────────────────────────────────
+# SQLite stats DB  (lightweight, always on)
+# ─────────────────────────────────────────
 DB_PATH = 'stats.db'
+
 def init_db():
     conn = sqlite3.connect(DB_PATH)
     c = conn.cursor()
@@ -81,60 +163,18 @@ def increment_stat(column):
         conn.commit()
         conn.close()
 
-# -----------------------------
-# 2. Malware Detection Setup
-# -----------------------------
-malware_model = joblib.load('ML_model/malwareclassifier-V2.pkl')
-malware_explainer = MalwareExplainer(malware_model)
 UPLOAD_FOLDER = 'uploads'
 if not os.path.exists(UPLOAD_FOLDER):
     os.makedirs(UPLOAD_FOLDER)
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 ALLOWED_EXTENSIONS = {'dll', 'exe'}
+
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
-# -----------------------------
-# 3. Email Phishing Setup
-# -----------------------------
-GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
-rag_chain = None
-rag_error = None
-
-if GEMINI_API_KEY:
-    llm = ChatGoogleGenerativeAI(model="gemini-3.5-flash", google_api_key=GEMINI_API_KEY, temperature=0.1)
-    embeddings = GoogleGenerativeAIEmbeddings(model="models/gemini-embedding-2", google_api_key=GEMINI_API_KEY)
-
-    try:
-        loader = TextLoader("knowledge_base.txt")
-        docs = loader.load()
-        text_splitter = RecursiveCharacterTextSplitter(chunk_size=500, chunk_overlap=100)
-        splits = text_splitter.split_documents(docs)
-        vectorstore = FAISS.from_documents(documents=splits, embedding=embeddings)
-        retriever = vectorstore.as_retriever()
-        
-        system_prompt = (
-            "You are an expert cybersecurity analyst specialized in detecting email phishing attempts. "
-            "Use the following retrieved context to analyze the provided email content. "
-            "Determine if the email is 'Phishing' or 'Safe'. Provide a detailed reasoning based on the context and indicators present. "
-            "Point out specific red flags (if any) such as urgent language, suspicious links, or weird sender domains. "
-            "Also, estimate the probability (0 to 100) that this email is phishing based on the severity of the indicators. "
-            "Format your response in a clear and structured way using Markdown.\n\n"
-            "IMPORTANT: You MUST start your response exactly with the following HTML block to highlight the final verdict and probability. "
-            "Use <div class='verdict verdict-safe' data-probability='[PROBABILITY]'>SAFE</div> if safe, or <div class='verdict verdict-phishing' data-probability='[PROBABILITY]'>PHISHING</div> if it is phishing. Replace [PROBABILITY] with the integer percentage chance (e.g. 15 for 15%).\n\n"
-            "{context}"
-        )
-        prompt = ChatPromptTemplate.from_messages([("system", system_prompt), ("human", "{input}")])
-        question_answer_chain = create_stuff_documents_chain(llm, prompt)
-        rag_chain = create_retrieval_chain(retriever, question_answer_chain)
-    except Exception as e:
-        rag_error = str(e)
-else:
-    rag_error = "GEMINI_API_KEY is not set."
-
-# -----------------------------
-# Unified Routes
-# -----------------------------
+# ─────────────────────────────────────────
+# Routes
+# ─────────────────────────────────────────
 
 @app.route("/")
 def home():
@@ -155,14 +195,14 @@ def predict_url():
         url = data["url"].strip()
         if not url:
             return jsonify({"error": "URL not provided"}), 400
-            
+
+        pm = get_phishing_model()
         features = extract_features_url(url)
-        features_array = np.array([[features[name] for name in feature_names]], dtype=float)
-        prediction = int(phishing_model.predict(features_array)[0])
-        probability = phishing_model.predict_proba(features_array)[0]
+        features_array = np.array([[features[name] for name in FEATURE_NAMES]], dtype=float)
+        probability = pm['model'].predict_proba(features_array)[0]
         threat_level = float(round(probability[1] * 100, 2))
-        explanation = explainer.explain(features_array)
-        
+        explanation = pm['explainer'].explain(features_array)
+
         if threat_level >= 70: result = "Phishing"
         elif threat_level >= 30: result = "Medium Legitimate"
         else: result = "Legitimate"
@@ -192,14 +232,14 @@ def predict_qr():
         url = data["url"].strip()
         if not url:
             return jsonify({"error": "URL not provided"}), 400
-            
+
+        pm = get_phishing_model()
         features = extract_features_url(url)
-        features_array = np.array([[features[name] for name in feature_names]], dtype=float)
-        prediction = int(phishing_model.predict(features_array)[0])
-        probability = phishing_model.predict_proba(features_array)[0]
+        features_array = np.array([[features[name] for name in FEATURE_NAMES]], dtype=float)
+        probability = pm['model'].predict_proba(features_array)[0]
         threat_level = float(round(probability[1] * 100, 2))
-        explanation = explainer.explain(features_array)
-        
+        explanation = pm['explainer'].explain(features_array)
+
         if threat_level >= 70:
             result = "Phishing"
             increment_stat('phishing')
@@ -233,15 +273,16 @@ def analyze_malware():
         file = request.files['file']
         if file.filename == '' or not allowed_file(file.filename):
             return render_template('malware_dashboard.html', error="Unsupported file type.")
-        
+
         file_path = os.path.join(app.config['UPLOAD_FOLDER'], file.filename)
         file.save(file_path)
 
+        mm = get_malware_model()
         features = extract_features_malware(file_path)
         if features is not None:
-            prediction = malware_model.predict(features)
+            prediction = mm['model'].predict(features)
             is_malware = prediction[0] == 1
-            explanation = malware_explainer.explain(features)
+            explanation = mm['explainer'].explain(features)
             result = {
                 "type": "file",
                 "prediction": "Malware" if is_malware else "Safe",
@@ -267,6 +308,7 @@ def email_phishing_home():
 
 @app.route('/analyze_email', methods=['POST'])
 def analyze_email():
+    rag_chain, rag_error = get_rag_chain()
     if not rag_chain:
         return jsonify({"error": f"The RAG system failed to initialize. Exact Error: {rag_error}"}), 500
     if 'file' not in request.files:
@@ -283,7 +325,7 @@ def analyze_email():
                 if extracted: email_text += extracted + "\n"
             if not email_text.strip():
                 return jsonify({"error": "Could not extract text from the PDF"}), 400
-            
+
             response = rag_chain.invoke({"input": email_text})
             return jsonify({"result": response["answer"]})
         except Exception as e:
