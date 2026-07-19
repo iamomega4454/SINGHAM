@@ -862,6 +862,77 @@
         </svg>
     </footer>
 
+    <!-- ── Rule-Based Advisor Popup ── -->
+    <div id="advisor-toast" style="
+        display: none;
+        position: fixed;
+        bottom: 2rem;
+        right: 2rem;
+        max-width: 380px;
+        background: rgba(255,255,255,0.92);
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+        border: 1px solid rgba(255,255,255,0.9);
+        border-radius: 18px;
+        box-shadow: 0 20px 50px rgba(59,130,246,0.15), inset 0 1px 0 rgba(255,255,255,0.8);
+        padding: 1.1rem 1.4rem;
+        display: none;
+        align-items: flex-start;
+        gap: 0.85rem;
+        z-index: 9999;
+        animation: toastIn 0.45s cubic-bezier(0.16,1,0.3,1) both;
+        font-family: 'Inter', sans-serif;
+    ">
+        <div id="advisor-icon" style="font-size: 1.6rem; flex-shrink: 0; margin-top: 0.05rem;"></div>
+        <div style="flex: 1; min-width: 0;">
+            <div id="advisor-label" style="font-size: 0.68rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 0.3rem; opacity: 0.6;"></div>
+            <div id="advisor-text" style="font-size: 0.9rem; font-weight: 500; color: #0a2540; line-height: 1.45;"></div>
+        </div>
+        <button onclick="document.getElementById('advisor-toast').style.display='none'" style="
+            background: none; border: none; cursor: pointer;
+            color: #94a3b8; font-size: 1.1rem; padding: 0; flex-shrink: 0;
+            line-height: 1; margin-top: 0.05rem;
+        ">✕</button>
+    </div>
+
+    <style>
+        @keyframes toastIn {
+            from { opacity: 0; transform: translateY(20px) scale(0.96); }
+            to   { opacity: 1; transform: translateY(0) scale(1); }
+        }
+    </style>
+
+    <script>
+    (function() {
+        var raw = localStorage.getItem('singham_advice');
+        if (!raw) return;
+        try {
+            var data = JSON.parse(raw);
+            localStorage.removeItem('singham_advice');
+
+            var labels = { url: '🔗 URL Scan Result', email: '📧 Email Scan Result', malware: '🦠 Malware Scan Result', qr: '📷 QR Code Scan Result' };
+            var toast  = document.getElementById('advisor-toast');
+            var icon   = document.getElementById('advisor-icon');
+            var label  = document.getElementById('advisor-label');
+            var text   = document.getElementById('advisor-text');
+
+            icon.textContent  = data.threat ? '🚨' : '✅';
+            label.textContent = labels[data.type] || 'Scan Result';
+            text.textContent  = data.advice;
+            toast.style.borderLeft = data.threat ? '4px solid #ef4444' : '4px solid #10b981';
+            toast.style.display = 'flex';
+
+            // Auto-dismiss after 8 seconds
+            setTimeout(function() {
+                toast.style.transition = 'opacity 0.4s, transform 0.4s';
+                toast.style.opacity = '0';
+                toast.style.transform = 'translateY(10px)';
+                setTimeout(function() { toast.style.display = 'none'; }, 400);
+            }, 8000);
+        } catch(e) {}
+    })();
+    </script>
+
 </body>
 
 </html>

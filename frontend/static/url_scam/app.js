@@ -187,14 +187,17 @@ function renderResult(data) {
     document.documentElement.setAttribute('data-theme', 'danger');
     setStatus("Threat detected", "danger");
     requestMessage.textContent = "The model marked this URL as suspicious. Review the explanation and chart carefully.";
+    localStorage.setItem('singham_advice', JSON.stringify({ type: 'url', threat: true, advice: "⚠️ This URL is flagged as phishing — avoid clicking it and report it to your browser or IT team." }));
   } else if (data.prediction === "Medium Legitimate") {
     document.documentElement.setAttribute('data-theme', 'warning');
     setStatus("Medium threat found but you can browse", "warning");
     requestMessage.textContent = "The model marked this URL as a medium threat. Proceed with caution.";
+    localStorage.setItem('singham_advice', JSON.stringify({ type: 'url', threat: false, advice: "⚠️ This URL has a medium risk score — proceed with caution and avoid entering personal data." }));
   } else {
     document.documentElement.setAttribute('data-theme', 'safe');
     setStatus("Looks legitimate", "safe");
     requestMessage.textContent = "The model marked this URL as likely legitimate based on the extracted indicators.";
+    localStorage.setItem('singham_advice', JSON.stringify({ type: 'url', threat: false, advice: "✅ URL looks safe — always verify the domain and SSL certificate before entering credentials." }));
   }
 }
 
