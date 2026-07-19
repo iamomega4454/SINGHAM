@@ -55,6 +55,14 @@ document.addEventListener('DOMContentLoaded', () => {
             }
             
             resultSection.classList.remove('hidden');
+
+            // Rule-based advisor: save advice for home page popup
+            const isHighRisk = (data.result || '').toLowerCase().includes('phishing') ||
+                               (data.result || '').toLowerCase().includes('malicious');
+            const advice = isHighRisk
+                ? "⚠️ Phishing email detected — do not reply or click links; mark as spam and delete immediately."
+                : "✅ No phishing detected — stay alert for unexpected attachments or urgent requests for personal info.";
+            localStorage.setItem('singham_advice', JSON.stringify({ type: 'email', threat: isHighRisk, advice }));
         } catch (error) {
             resultContent.innerHTML = `<div class="error-text"><strong>Error:</strong> ${error.message}</div>`;
             resultSection.classList.remove('hidden');

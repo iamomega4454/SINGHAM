@@ -187,14 +187,17 @@ function renderResult(data) {
     document.documentElement.setAttribute('data-theme', 'danger');
     setStatus("Threat detected", "danger");
     requestMessage.textContent = "The model marked this URL as suspicious. Review the explanation and chart carefully.";
+    localStorage.setItem('singham_advice', JSON.stringify({ type: 'qr', threat: true, advice: "⚠️ Malicious QR code detected — do not follow the embedded URL and avoid scanning it in public." }));
   } else if (data.prediction === "Medium Legitimate") {
     document.documentElement.setAttribute('data-theme', 'warning');
     setStatus("Medium threat found but you can browse", "warning");
     requestMessage.textContent = "The model marked this URL as a medium threat. Proceed with caution.";
+    localStorage.setItem('singham_advice', JSON.stringify({ type: 'qr', threat: false, advice: "⚠️ QR code has a medium risk score — verify its source and destination URL before proceeding." }));
   } else {
     document.documentElement.setAttribute('data-theme', 'safe');
     setStatus("Looks legitimate", "safe");
     requestMessage.textContent = "The model marked this URL as likely legitimate based on the extracted indicators.";
+    localStorage.setItem('singham_advice', JSON.stringify({ type: 'qr', threat: false, advice: "✅ QR code appears safe — always preview the URL a QR code points to before opening it." }));
   }
 }
 
