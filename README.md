@@ -260,3 +260,9 @@ The Email Phishing analysis system relies on Google Gemini models. You need to c
 - ✅ AI Explanation (XAI) Engine
 - ⏳ Centralized Threat Report Dashboard
 - ⏳ Production Deployment & Docker Support
+
+---
+
+<p align="center">
+  Made with ❤️ by Deon George, Karthik Krishnan, Amal Kuriyan Royce, and Joel M Thomas
+</p>
